@@ -62,4 +62,9 @@ public class ActivityC extends Activity {
 		
 		Log.d("TAG", "ActivityC.startActivityB()");
 	}
+	
+	public void close(View v) {
+		Log.d("TAG", "ActivityC.finish()");
+		finish();
+	}
 }

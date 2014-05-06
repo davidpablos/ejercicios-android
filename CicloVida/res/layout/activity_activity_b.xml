@@ -39,7 +39,8 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/button2"
             android:layout_marginTop="44dp"
-            android:text="Cerrar" />
+            android:text="Cerrar" 
+            android:onClick="close" />
 
     </RelativeLayout>
 

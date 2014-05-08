@@ -15,77 +15,65 @@ import android.widget.TextView;
 import android.os.Build;
 
 public class MainActivity extends Activity {
-	
+
 	private Calculadora calc;
 	private TextView textView, resultView;
-	
-	private String op = "";
-	private double op1 = 0;
-	private double op2 = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		calc = new Calculadora();
-		resultView = (TextView)findViewById(R.id.display);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-			return rootView;
-		}
+		resultView = (TextView) findViewById(R.id.display);
 	}
 	
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+	     // Save UI state changes to the savedInstanceState.
+	     // This bundle will be passed to onCreate and
+	     // onRestoreInstanceState if the process is
+	     // killed and restarted by the run time.
+		savedInstanceState.putString("operador", this.calc.getOp());
+		savedInstanceState.putDouble("op1", this.calc.getOp1());
+		super.onSaveInstanceState(savedInstanceState);
+	}
+	
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	     super.onRestoreInstanceState(savedInstanceState);
+	     // Restore UI state from the savedInstanceState.
+	     // This bundle has also been passed to onCreate.
+	     String operador = savedInstanceState.getString("operador");
+	     double op1 = savedInstanceState.getDouble("op1");
+	     this.calc.pulsarOperador(op1, operador);
+	}
+
 	public void pulsarDigito(View v) {
 		Log.d("TAG", "MainActivity.pulsarDigito()");
 		Button btn = (Button) v;
 		String num = btn.getText().toString();
-		
+
 		String result = this.resultView.getText().toString() + num;
-		this.resultView.setText(result); 
+
+		this.resultView.setText(result);
+
 	}
 
 	public void pulsarOperador(View v) {
 		Log.d("TAG", "MainActivity.pulsarOperador()");
 		Button btn = (Button) v;
-		this.op1 = Double.parseDouble(this.resultView.getText().toString());
-		this.op = btn.getText().toString();
+		double op1 = Double.parseDouble(this.resultView.getText().toString());
+		Log.d("TAG", btn.getText().toString());
+		this.calc.pulsarOperador(op1, btn.getText().toString());
+
+		this.resultView.setText("");
 	}
-	
+
 	public void pulsarIgual(View v) {
-		this.op2 = Double.parseDouble(this.resultView.getText().toString());
-		this.calc.realizarOperacion(this.op1, this.op2, this.op);
+		Log.d("TAG", "MainActivity.pulsarIgual()");
+		String result = this.calc.realizarOperacion(this.resultView.getText()
+				.toString());
+		Log.d("TAG", result);
+		this.resultView.setText(result);
 	}
 }

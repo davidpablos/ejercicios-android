@@ -22,7 +22,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
 
             <Button
                 android:id="@+id/button1"
@@ -39,50 +40,52 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
 
             <Button
                 android:id="@+id/button3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="7"
-                android:onClick="pulsarDigito" />
+                android:onClick="pulsarDigito"
+                android:text="7" />
 
             <Button
                 android:id="@+id/button4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="8"
-                android:onClick="pulsarDigito" />
+                android:onClick="pulsarDigito"
+                android:text="8" />
 
             <Button
                 android:id="@+id/button5"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="9"
-                android:onClick="pulsarDigito" />
+                android:onClick="pulsarDigito"
+                android:text="9" />
 
             <Button
                 android:id="@+id/button6"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="/" 
-                android:onClick="pulsarOperador" />
+                android:onClick="pulsarOperador"
+                android:text="/" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
 
             <Button
                 android:id="@+id/button7"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="4"
                 android:onClick="pulsarDigito" />
@@ -90,7 +93,7 @@
             <Button
                 android:id="@+id/button8"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="5"
                 android:onClick="pulsarDigito" />
@@ -98,7 +101,7 @@
             <Button
                 android:id="@+id/button9"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="6"
                 android:onClick="pulsarDigito" />
@@ -106,7 +109,7 @@
             <Button
                 android:id="@+id/button10"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="x"
                 android:onClick="pulsarOperador" />
@@ -115,12 +118,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
 
             <Button
                 android:id="@+id/button11"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="1"
                 android:onClick="pulsarDigito" />
@@ -128,7 +132,7 @@
             <Button
                 android:id="@+id/button12"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="2" 
                 android:onClick="pulsarDigito" />
@@ -136,7 +140,7 @@
             <Button
                 android:id="@+id/button13"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="3"
                 android:onClick="pulsarDigito" />
@@ -144,7 +148,7 @@
             <Button
                 android:id="@+id/button14"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="-" 
                 android:onClick="pulsarOperador" />
@@ -153,19 +157,20 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
 
             <Button
                 android:id="@+id/button15"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="." />
 
             <Button
                 android:id="@+id/button16"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="0" 
                 android:onClick="pulsarDigito" />
@@ -173,15 +178,15 @@
             <Button
                 android:id="@+id/button17"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="=" 
-                android:onClick="pulsarOperador" />
+                android:onClick="pulsarIgual" />
 
             <Button
                 android:id="@+id/button18"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="+" 
                 android:onClick="pulsarOperador" />

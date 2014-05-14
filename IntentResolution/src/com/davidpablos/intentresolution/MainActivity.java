@@ -12,18 +12,19 @@ import android.widget.TextView;
 import com.davidpablos.intentresolution.MainFragment.IIntentResolution;
 
 public class MainActivity extends Activity implements IIntentResolution {
-
+	
+	MainFragment mf;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		
+		mf = new MainFragment();
 		
 		if(savedInstanceState == null) {
 			FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-			fragmentTransaction.add(R.id.main_container, new MainFragment(), "MainFragment");
+			fragmentTransaction.add(R.id.main_container, mf, "MainFragment");
 			fragmentTransaction.commit();
 		}
 	}
@@ -50,5 +51,13 @@ public class MainActivity extends Activity implements IIntentResolution {
 //		ImageView iv = (ImageView)findViewById(R.id.imageViewMain);
 //        iv.setImageBitmap(imageBitmap);
 	}
+	
+//	@Override
+//	 public void onWindowFocusChanged(boolean hasFocus) {
+//	  // TODO Auto-generated method stub
+//	  super.onWindowFocusChanged(hasFocus);
+//	  //Here you can get the size!
+//	  mf.setPic();
+//	 }
 
 }

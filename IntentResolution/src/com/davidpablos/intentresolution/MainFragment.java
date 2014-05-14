@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -64,6 +65,18 @@ public class MainFragment extends Fragment {
 		
 		iv = (ImageView)v.findViewById(R.id.imageViewMain);
 		
+		iv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+	        @Override
+	        public void onGlobalLayout() {
+	            // Ensure you call it only once :
+	            iv.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+
+	            // Here you can get the size :)
+	            setPic();
+	        }
+	    });
+		
 		Button boton = (Button) v.findViewById(R.id.buttonFormMain);		
 		boton.setOnClickListener(new Button.OnClickListener() {
 
@@ -86,7 +99,6 @@ public class MainFragment extends Fragment {
 				Log.d("TAG", "onClick() Camera");
 				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-//			        startActivityForResult(intent, CAMERA_ACTION);
 			    	File photoFile = null;
 			        try {
 			            photoFile = createImageFile();
@@ -99,6 +111,16 @@ public class MainFragment extends Fragment {
 			            startActivityForResult(intent, CAMERA_ACTION);
 			        }
 			    }
+			}
+		});
+		
+		Button botonContactos = (Button) v.findViewById(R.id.buttonContactsMain);
+		botonContactos.setOnClickListener(new Button.OnClickListener() {
+
+			@Override
+			public void onClick(View viewButton) {
+				Log.d("TAG", "onClick() Contactos");
+				Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			}
 		});
 		return v;
@@ -140,13 +162,6 @@ public class MainFragment extends Fragment {
 		}
 		
 		super.onSaveInstanceState(outState);
-	}
-	
-	@Override
-	public void onResume() {
-		super.onResume();
-		
-		setPic();
 	}
 	
 	@Override
@@ -206,7 +221,8 @@ public class MainFragment extends Fragment {
 		    iv.setImageBitmap(bitmap);
 	    }
 
-	   
 	}
+	
+
 
 }

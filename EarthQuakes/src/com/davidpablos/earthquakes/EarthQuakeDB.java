@@ -31,25 +31,28 @@ public class EarthQuakeDB {
 
 	public void close() {
 		dbHelper.close();
+		dbHelper = null;
+		db = null;
 	}
 
-	public ArrayList query(Double magnitude) {
+	public ArrayList<EarthQuake> query(Double magnitude) {
 		// Specify the where clause that will limit our results.
 		String where = EarthQuakeDBOpenHelper.MAGNITUDE + " > ?";
 		String whereArgs[] = { magnitude.toString() };
 		String groupBy = null;
 		String having = null;
-		String order = null;
-		Cursor cursor = db.query(EarthQuakeDBOpenHelper.DATABASE_TABLE,EarthQuakeDBOpenHelper.RESULT_COLUMNS, where,
-				whereArgs, groupBy, having, order);
+		String order = EarthQuakeDBOpenHelper.TIME + " DESC";
+		Cursor cursor = db.query(EarthQuakeDBOpenHelper.DATABASE_TABLE,
+									EarthQuakeDBOpenHelper.RESULT_COLUMNS, where,
+									whereArgs, groupBy, having, order);
 		
-		ArrayList queryResult = fromCursorToArrayList(cursor);
+		ArrayList<EarthQuake> queryResult = fromCursorToArrayList(cursor);
 
 		return queryResult;
 	}
 	
 	private ArrayList<EarthQuake> fromCursorToArrayList(Cursor cursor) {
-		ArrayList<EarthQuake> result = new ArrayList<EarthQuake>();
+		ArrayList<EarthQuake> earthquakeList = new ArrayList<EarthQuake>();
 		
 		int PLACE_INDEX = cursor.getColumnIndexOrThrow(EarthQuakeDBOpenHelper.PLACE);
 		int TIME_INDEX = cursor.getColumnIndexOrThrow(EarthQuakeDBOpenHelper.TIME);
@@ -58,8 +61,6 @@ public class EarthQuakeDB {
 		int LAT_INDEX = cursor.getColumnIndexOrThrow(EarthQuakeDBOpenHelper.LAT);
 		int LONG_INDEX = cursor.getColumnIndexOrThrow(EarthQuakeDBOpenHelper.LONG);
 		int URL_INDEX = cursor.getColumnIndexOrThrow(EarthQuakeDBOpenHelper.URL);
-		int CREATED_AT_INDEX = cursor.getColumnIndexOrThrow(EarthQuakeDBOpenHelper.CREATED_AT);
-		int UPDATED_AT_INDEX = cursor.getColumnIndexOrThrow(EarthQuakeDBOpenHelper.UPDATED_AT);
 		
 		while (cursor.moveToNext()) {
 			EarthQuake earthquake = new EarthQuake(cursor.getString(PLACE_INDEX), 
@@ -69,9 +70,11 @@ public class EarthQuakeDB {
 					cursor.getDouble(LAT_INDEX), 
 					cursor.getDouble(LONG_INDEX), 
 					cursor.getString(URL_INDEX));
-			result.add(earthquake);
+			earthquakeList.add(earthquake);
 		}
-		return result;
+		
+		cursor.close();
+		return earthquakeList;
 	}
 
 	public void insert(EarthQuake earthquake) {

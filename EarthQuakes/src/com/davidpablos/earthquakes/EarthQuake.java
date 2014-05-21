@@ -12,6 +12,10 @@ public class EarthQuake {
 	private Double lng;
 	private String url;
 	
+	
+	public EarthQuake() {
+	}
+	
 	public EarthQuake(String place, long time, String detail, Double magnitude,
 			Double lat, Double lng, String url) {
 		this.place = place;

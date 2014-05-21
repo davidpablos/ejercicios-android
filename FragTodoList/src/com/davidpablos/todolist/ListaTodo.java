@@ -26,7 +26,7 @@ public class ListaTodo extends ListFragment {
 			Bundle savedInstanceState) {
 		
 		this.mainList = new ArrayList<String>();
-		this.adapter = new ArrayAdapter<String>(context, textViewResourceId);
+		adapter = new ArrayAdapter<String>(inflater.getContext(), android.R.layout.simple_list_item_1, mainList);
 		setListAdapter(this.adapter);
 		
 		return super.onCreateView(inflater, container, savedInstanceState);

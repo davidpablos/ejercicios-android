@@ -4,5 +4,6 @@
     <string name="app_name">EarthQuakes</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="magnitude_list_key">Magnitude</string>
 
 </resources>

@@ -13,6 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.davidpablos.earthquakes.DownloadEarthQuakes.ICallback;
+
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -22,7 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-public class EarthQuakeList extends ListFragment {
+public class EarthQuakeList extends ListFragment implements ICallback {
 	
 	private static final String EARTHQUAKES_URL = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson";
 	
@@ -34,11 +36,9 @@ public class EarthQuakeList extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		
 		this.earthquakeList = new ArrayList<EarthQuake>();
 		adapter = new ArrayAdapter<EarthQuake>(inflater.getContext(), android.R.layout.simple_list_item_1, earthquakeList);
 		setListAdapter(this.adapter);
-		
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 	
@@ -56,6 +56,8 @@ public class EarthQuakeList extends ListFragment {
 		earthquakeList.addAll(db.query(0.0));
 		adapter.notifyDataSetChanged();
 		
+		new DownloadEarthQuakes(getActivity(), this).execute(EARTHQUAKES_URL);
+		
 //		if(savedInstanceState != null) {
 //			// Meter datos en la lista de terremotos
 //			//Falta
@@ -66,84 +68,18 @@ public class EarthQuakeList extends ListFragment {
 //		}
 	}
 	
-	private void getEarthQuakes() {
-		Thread t = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				descargarJSON();
-			}
-		});
-		t.start();
-	}
+//	private void getEarthQuakes() {
+//		Thread t = new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				descargarJSON();
+//			}
+//		});
+//		t.start();
+//	}
 	
-	private void descargarJSON() {
-		JSONObject json;
-		Log.d("TAG", "DOWNLOAD");
-		try {
-			URL url = new URL(EARTHQUAKES_URL);
 
-			// Create a new HTTP URL connection
-			URLConnection connection = url.openConnection();
-			HttpURLConnection httpConnection = (HttpURLConnection) connection;
-
-			int responseCode = httpConnection.getResponseCode();
-			if (responseCode == HttpURLConnection.HTTP_OK) {
-				try {
-					BufferedReader streamReader = new BufferedReader(
-							new InputStreamReader(
-									httpConnection.getInputStream(), "UTF-8"));
-					StringBuilder responseStrBuilder = new StringBuilder();
-
-					String inputStr;
-					while ((inputStr = streamReader.readLine()) != null)
-						responseStrBuilder.append(inputStr);
-
-					json = new JSONObject(responseStrBuilder.toString());
-					processJSON(json);
-				} catch (JSONException e) {
-					Log.e("500PX",
-							"Error al leer el fichero JSON: " + e.getMessage());
-				}
-			}
-		} catch (MalformedURLException e) {
-			Log.d("500PX", "Malformed URL Exception.", e);
-		} catch (IOException e) {
-			Log.d("500PX", "IO Exception.", e);
-		}
-	}
-
-	private void processJSON(JSONObject json) {
-		try {
-			JSONArray terremotos = json.getJSONArray("features");
-			
-			for (int i = 0; i < terremotos.length(); i++) {
-				
-				EarthQuake earthquake = new EarthQuake();
-				JSONObject earthquakeProperties = terremotos.getJSONObject(i).getJSONObject("properties");
-				JSONArray earthquakeCoordinates = terremotos.getJSONObject(i).getJSONObject("geometry").getJSONArray("coordinates");
-				
-				earthquake.setPlace(earthquakeProperties.getString("place"));
-				earthquake.setTime(earthquakeProperties.getInt("time"));
-				earthquake.setDetail(earthquakeProperties.getString("detail"));
-				earthquake.setMagnitude(earthquakeProperties.getDouble("mag"));
-				earthquake.setLat(earthquakeCoordinates.getDouble(0));
-				earthquake.setLng(earthquakeCoordinates.getDouble(1));
-				earthquake.setUrl(earthquakeProperties.getString("url"));
-
-				db.insert(earthquake);
-			}
-			
-			ArrayList<EarthQuake> result = db.query(0.0);
-			
-			for(EarthQuake eq: result) {
-				Log.d("TAG", eq.getPlace());
-			}
-			
-		} catch (JSONException e) {
-			Log.e("DOWNLOADS", e.getMessage());
-		}
-	}
 	
 //	private void updateList() {
 //		String mag = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.magnitude_list_key), "0");
@@ -157,6 +93,14 @@ public class EarthQuakeList extends ListFragment {
 	public void onResume() {
 		super.onResume();
 //		updateList();
+	}
+
+	@Override
+	public void refreshEarthquakesList(ArrayList<EarthQuake> earthquakes) {
+		// TODO Auto-generated method stub
+		earthquakeList.addAll(earthquakes);
+		adapter.notifyDataSetChanged();
+		Log.d("TAG", "REFRESH");
 	}
 	
 }

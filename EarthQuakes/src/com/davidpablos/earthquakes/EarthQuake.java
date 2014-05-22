@@ -2,6 +2,8 @@ package com.davidpablos.earthquakes;
 
 import java.util.Date;
 
+import android.text.format.DateFormat;
+
 public class EarthQuake {
 	
 	private String place;
@@ -85,6 +87,6 @@ public class EarthQuake {
 	
 	@Override
 	public String toString() {
-		return this.getPlace();
+		return "Mag: " + magnitude + "\nTime: " + DateFormat.format("yyyy-MM-dd hh:mm:ss", time) + "\nPlace: " + place;
 	}
 }

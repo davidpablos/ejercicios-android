@@ -77,7 +77,7 @@ public class EarthQuakeDB {
 		return earthquakeList;
 	}
 
-	public void insert(EarthQuake earthquake) {
+	public long insert(EarthQuake earthquake) {
 		// Create a new row of values to insert.
 		ContentValues newValues = new ContentValues();
 
@@ -96,7 +96,7 @@ public class EarthQuakeDB {
 		newValues.put(EarthQuakeDBOpenHelper.UPDATED_AT, time);
 		
 		// Insert the row into your table
-		db.insert(EarthQuakeDBOpenHelper.DATABASE_TABLE, null, newValues);
+		return db.insert(EarthQuakeDBOpenHelper.DATABASE_TABLE, null, newValues);
 	}
 
 	public void update(int earthquakeId, EarthQuake earthquake) {

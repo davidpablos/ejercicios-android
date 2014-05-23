@@ -36,7 +36,7 @@ public class DownloadEarthQuakes extends AsyncTask<String, Integer, ArrayList<Ea
 		dbHelper = new EarthQuakeDBOpenHelper(context,
 				EarthQuakeDBOpenHelper.DATABASE_NAME, null,
 				EarthQuakeDBOpenHelper.DATABASE_VERSION);
-		db = new EarthQuakeDB(context);
+		db = EarthQuakeDB.getInstance(context);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class DownloadEarthQuakes extends AsyncTask<String, Integer, ArrayList<Ea
 		} catch (IOException e) {
 			Log.d("EarthQuakes", "IO Exception.", e);
 		}
-		
+		Log.d("TAG", ((Integer)earthquakeList.size()).toString());
 		return earthquakeList;
 	}
 
@@ -96,7 +96,7 @@ public class DownloadEarthQuakes extends AsyncTask<String, Integer, ArrayList<Ea
 		try {
 			JSONArray terremotos = json.getJSONArray("features");
 			
-			for (int i = 0; i < terremotos.length(); i++) {
+			for (int i = terremotos.length()-1; i >= 0; i--) {
 				
 				EarthQuake earthquake = new EarthQuake();
 				JSONObject earthquakeProperties = terremotos.getJSONObject(i).getJSONObject("properties");
@@ -111,14 +111,14 @@ public class DownloadEarthQuakes extends AsyncTask<String, Integer, ArrayList<Ea
 				earthquake.setUrl(earthquakeProperties.getString("url"));
 
 				long id = db.insert(earthquake);
-				if(id != -1)
+				if(id != -1) {
+					earthquake.setId((Long)id);
 					earthquakeList.add(earthquake);
-				
-//				db.insert(earthquake);
+				}
+					
+
 			}
-			
-//			earthquakeList = db.query(0.0);
-			
+
 			for(EarthQuake eq: earthquakeList) {
 				Log.d("TAG", eq.getPlace());
 			}
@@ -130,12 +130,6 @@ public class DownloadEarthQuakes extends AsyncTask<String, Integer, ArrayList<Ea
 	}
 	
 	protected void onPostExecute(ArrayList<EarthQuake> earthquakeList) {
-//		for(EarthQuake eq: earthquakeList) {
-//			long id = db.insert(eq);
-//			
-//			
-//			Log.d("TAG", "Terremoto: " + eq.getPlace() + " insertado");
-//		}
 		
 		callback.refreshEarthquakesList(earthquakeList);
 	}

@@ -1,0 +1,6 @@
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+<header
+    android:fragment="com.davidpablos.preferences.FragmentSettingsActivity"
+    android:summary="Description of these preferences"
+    android:title="My Preferences" />
+</preference-headers>

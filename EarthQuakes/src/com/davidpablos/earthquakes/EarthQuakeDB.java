@@ -10,15 +10,25 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 public class EarthQuakeDB {
+	
+	private static EarthQuakeDB instance;
 
 	private EarthQuakeDBOpenHelper dbHelper;
 	private SQLiteDatabase db;
 
-	public EarthQuakeDB(Context context) {
+	private EarthQuakeDB(Context context) {
 		dbHelper = new EarthQuakeDBOpenHelper(context,
 				EarthQuakeDBOpenHelper.DATABASE_NAME, null,
 				EarthQuakeDBOpenHelper.DATABASE_VERSION);
 		db = this.open();
+	}
+	
+	public static EarthQuakeDB getInstance(Context context) {
+		if(instance == null) {
+			instance = new EarthQuakeDB(context);
+		}
+		
+		return instance;
 	}
 
 	public SQLiteDatabase open() {
@@ -70,6 +80,7 @@ public class EarthQuakeDB {
 					cursor.getDouble(LAT_INDEX), 
 					cursor.getDouble(LONG_INDEX), 
 					cursor.getString(URL_INDEX));
+			
 			earthquakeList.add(earthquake);
 		}
 		

@@ -5,7 +5,7 @@ import java.util.Date;
 import android.text.format.DateFormat;
 
 public class EarthQuake {
-	
+	private Long id;
 	private String place;
 	private Date time;
 	private String detail;
@@ -83,6 +83,14 @@ public class EarthQuake {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	@Override

@@ -29,7 +29,7 @@ public class EarthQuakeList extends ListFragment implements ICallback {
 	private static final String EARTHQUAKES_URL = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson";
 	
 	private ArrayList<EarthQuake> earthquakeList;
-	private ArrayAdapter<EarthQuake> adapter;
+	private LazyAdapter adapter;
 	private EarthQuakeDB db;
 	
 	@Override
@@ -37,7 +37,7 @@ public class EarthQuakeList extends ListFragment implements ICallback {
 			Bundle savedInstanceState) {
 		
 		this.earthquakeList = new ArrayList<EarthQuake>();
-		adapter = new ArrayAdapter<EarthQuake>(inflater.getContext(), android.R.layout.simple_list_item_1, earthquakeList);
+		adapter = new LazyAdapter(getActivity(), earthquakeList);
 		setListAdapter(this.adapter);
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
@@ -52,53 +52,39 @@ public class EarthQuakeList extends ListFragment implements ICallback {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		db = new EarthQuakeDB(getActivity());
-		earthquakeList.addAll(db.query(0.0));
+		db = EarthQuakeDB.getInstance(getActivity());
+		String mag = PreferenceManager.getDefaultSharedPreferences(getActivity()).
+						getString(getActivity().getString(R.string.magnitude_list_key), "0");
+		earthquakeList.addAll(db.query(Double.parseDouble(mag)));
 		adapter.notifyDataSetChanged();
 		
 		new DownloadEarthQuakes(getActivity(), this).execute(EARTHQUAKES_URL);
-		
-//		if(savedInstanceState != null) {
-//			// Meter datos en la lista de terremotos
-//			//Falta
-//			earthquakeList.addAll(db.query(0.0));
-//			adapter.notifyDataSetChanged();
-//		} else {
-//			getEarthQuakes();
-//		}
-	}
-	
-//	private void getEarthQuakes() {
-//		Thread t = new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				descargarJSON();
-//			}
-//		});
-//		t.start();
-//	}
-	
 
-	
-//	private void updateList() {
-//		String mag = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(getString(R.string.magnitude_list_key), "0");
-//		Log.d("TAG", mag);
-//		earthquakeList.clear();
-////		earthquakeList.addAll(db.query(Double.parseDouble(mag)));
-//		adapter.notifyDataSetChanged();
-//	}
+	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-//		updateList();
+		Log.d("TAG", "Earthquake filter");
+		String mag = PreferenceManager.getDefaultSharedPreferences(getActivity()).
+				getString(getActivity().getString(R.string.magnitude_list_key), "0");
+		earthquakeList.addAll(db.query(Double.parseDouble(mag)));
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override
 	public void refreshEarthquakesList(ArrayList<EarthQuake> earthquakes) {
 		// TODO Auto-generated method stub
-		earthquakeList.addAll(earthquakes);
+		String mag = PreferenceManager.getDefaultSharedPreferences(getActivity()).
+				getString(getActivity().getString(R.string.magnitude_list_key), "0");
+
+		for(EarthQuake earthquake: earthquakes) {
+			
+			if(earthquake.getMagnitude() > Double.parseDouble(mag)) {
+				earthquakeList.add(0, earthquake);
+			}
+		}
+		
 		adapter.notifyDataSetChanged();
 		Log.d("TAG", "REFRESH");
 	}

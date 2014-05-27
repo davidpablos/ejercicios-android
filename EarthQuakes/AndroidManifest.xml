@@ -28,6 +28,7 @@
             android:name="com.davidpablos.preferences.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        <provider android:name=".MyContentProvider" android:authorities="com.davidpablos.provider.earthquakecontentprovider"></provider>
     </application>
 
 </manifest>

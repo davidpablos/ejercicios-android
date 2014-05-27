@@ -27,14 +27,10 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		Log.d("TAG", "FRAGMENT");
-		
 		if(savedInstanceState == null) {
-			Log.d("TAG", "FRAGMENT");
 			FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 			fragmentTransaction.add(R.id.container, new EarthQuakeList(), "earthquakeList");
 			fragmentTransaction.commit();
-			Log.d("TAG", "FRAGMENT");
 		}
 	}
 

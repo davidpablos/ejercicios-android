@@ -1,10 +1,9 @@
 package com.davidpablos.earthquakes;
 
-import java.util.ArrayList;
-
 import android.app.ListFragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 public class EarthQuakeList extends ListFragment implements LoaderCallbacks<Cursor> {
@@ -101,22 +101,15 @@ public class EarthQuakeList extends ListFragment implements LoaderCallbacks<Curs
 		adapter.swapCursor(null);
 		Log.d("TAG", "onLoadReset()");
 	}
-
-//	@Override
-//	public void refreshEarthquakesList(ArrayList<EarthQuake> earthquakes) {
-//		// TODO Auto-generated method stub
-//		String mag = PreferenceManager.getDefaultSharedPreferences(getActivity()).
-//				getString(getActivity().getString(R.string.magnitude_list_key), "0");
-//
-//		for(EarthQuake earthquake: earthquakes) {
-//			
-//			if(earthquake.getMagnitude() > Double.parseDouble(mag)) {
-//				earthquakeList.add(0, earthquake);
-//			}
-//		}
-//		
-//		adapter.notifyDataSetChanged();
-//		Log.d("TAG", "REFRESH");
-//	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		Log.d("TAG", "onListItemClick");
+		Intent intent = new Intent(getActivity(), EarthQuakeDetails.class);
+		intent.putExtra("ID", 2);
+		startActivity(intent);
+		super.onListItemClick(l, v, position, id);
+	}
 	
 }

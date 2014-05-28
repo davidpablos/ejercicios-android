@@ -6,6 +6,7 @@ import android.text.format.DateFormat;
 
 public class EarthQuake {
 	private Long id;
+	private String idStr;
 	private String place;
 	private Date time;
 	private String detail;
@@ -91,6 +92,14 @@ public class EarthQuake {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getIdStr() {
+		return idStr;
+	}
+	
+	public void setIdStr(String idStr) {
+		this.idStr = idStr;
 	}
 	
 	@Override

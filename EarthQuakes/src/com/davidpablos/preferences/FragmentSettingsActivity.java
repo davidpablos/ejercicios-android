@@ -30,8 +30,10 @@ public class FragmentSettingsActivity extends PreferenceFragment implements OnSh
 			boolean autorefresh = prefs.getBoolean(key, true);
 			if(autorefresh) {
 				//Start
+				
 			} else {
 				//Pause
+				
 			}
 		} else if(key == getResources().getString(R.string.interval_list_key)) {
 			Log.d("TAG", prefs.getString(key, "60"));

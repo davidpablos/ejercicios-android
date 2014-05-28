@@ -33,7 +33,9 @@
             android:name="com.davidpablos.earthquakes.MyContentProvider"
             android:authorities="com.davidpablos.provider.earthquakecontentprovider" >
         </provider>
-
+		<service android:enabled="true" android:name=".MyService"/>
+		<service android:enabled="true" android:name=".MyService"
+		    android:permission="com.davidpablos.MY_SERVICE_PERMISSION"/>
         <activity
             android:name="com.davidpablos.earthquakes.EarthQuakeDetails"
             android:label="@string/title_activity_earth_quake_details" >

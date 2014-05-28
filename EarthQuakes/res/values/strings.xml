@@ -14,5 +14,6 @@
     <string name="settings">System Settings</string>
     <string name="title_activity_fragment_settings">Title</string>
     <string name="title_activity_earth_quake_details">EarthQuakeDetails</string>
+    <string name="action_refresh">Refresh</string>
 
 </resources>

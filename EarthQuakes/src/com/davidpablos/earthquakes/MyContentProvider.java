@@ -46,7 +46,7 @@ public class MyContentProvider extends ContentProvider {
 		uriMatcher.addURI("com.davidpablos.provider.earthquakecontentprovider",
 				"earthquakes", ALLROWS);
 		uriMatcher.addURI("com.davidpablos.provider.earthquakecontentprovider",
-				"earthquakes/0", SINGLE_ROW);
+				"earthquakes/#", SINGLE_ROW);
 	}
 
 	@Override
@@ -57,13 +57,10 @@ public class MyContentProvider extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		Log.d("TAG", "getType()");
 		switch (uriMatcher.match(uri)) {
 		case ALLROWS:
-			Log.d("TAG", "getType1()");
 			return "vnd.android.cursor.dir/vnd.davidpablos.provider.earthquakecontentprovider";
 		case SINGLE_ROW:
-			Log.d("TAG", "getType2()");
 			return "vnd.android.cursor.item/vnd.davidpablos.provider.earthquakecontentprovider";
 		default:
 			throw new IllegalArgumentException("Unsupported URI: " + uri);
@@ -157,8 +154,9 @@ public class MyContentProvider extends ContentProvider {
 		// SQL Statement to create a new database.
 		private static final String DATABASE_CREATE =
 		        "create table " + DATABASE_TABLE + "(_id integer primary key autoincrement, "
+		        	+ "id_str text UNIQUE not null, "
 		            + "place text not null,"
-		            + "time datetime not null UNIQUE,"
+		            + "time datetime not null,"
 		            + "detail text not null,"
 		            + "magnitude real not null,"
 		            + "lat real not null,"

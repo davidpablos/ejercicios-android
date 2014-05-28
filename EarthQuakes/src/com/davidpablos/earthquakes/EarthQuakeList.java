@@ -17,12 +17,13 @@ import android.widget.SimpleCursorAdapter;
 
 public class EarthQuakeList extends ListFragment implements LoaderCallbacks<Cursor> {
 	
-	private static final String EARTHQUAKES_URL = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson";
+	public static final String EARTHQUAKES_URL = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson";
 	
 //	private ArrayList<EarthQuake> earthquakeList;
 	private SimpleCursorAdapter adapter;
 	
 	private final int LOADER_ID = 1;
+	private LoaderCallbacks<Cursor> mCallbacks;
 	
 	private String[] from = { MyContentProvider.MAGNITUDE, MyContentProvider.PLACE, MyContentProvider.TIME,
 			MyContentProvider.KEY_ID };
@@ -32,9 +33,6 @@ public class EarthQuakeList extends ListFragment implements LoaderCallbacks<Curs
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-//		this.earthquakeList = new ArrayList<EarthQuake>();
-//		adapter = new LazyAdapter(getActivity(), earthquakeList);
-//		setListAdapter(this.adapter);
 		adapter = new SimpleCursorAdapter(getActivity(),
 				R.layout.list_row, null, from, to, 0);
 		adapter.setViewBinder(new EarthQuakeViewBinder());
@@ -53,26 +51,18 @@ public class EarthQuakeList extends ListFragment implements LoaderCallbacks<Curs
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
+		mCallbacks = this;
 		getLoaderManager().initLoader(LOADER_ID, null, this);
 		
-//		db = EarthQuakeDB.getInstance(getActivity());
-//		String mag = PreferenceManager.getDefaultSharedPreferences(getActivity()).
-//						getString(getActivity().getString(R.string.magnitude_list_key), "0");
-//		earthquakeList.addAll(db.query(Double.parseDouble(mag)));
-//		adapter.notifyDataSetChanged();
-//		
-//		new DownloadEarthQuakes(getActivity(), this).execute(EARTHQUAKES_URL);
+//		new DownloadEarthQuakes(getActivity()).execute(EARTHQUAKES_URL);
+		Intent service = new Intent(getActivity(), MyService.class);
 		
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-//		Log.d("TAG", "Earthquake filter");
-//		String mag = PreferenceManager.getDefaultSharedPreferences(getActivity()).
-//				getString(getActivity().getString(R.string.magnitude_list_key), "0");
-//		earthquakeList.addAll(db.query(Double.parseDouble(mag)));
-//		adapter.notifyDataSetChanged();
+		getLoaderManager().restartLoader(LOADER_ID, null, mCallbacks);
 	}
 
 	@Override
@@ -104,10 +94,11 @@ public class EarthQuakeList extends ListFragment implements LoaderCallbacks<Curs
 	
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO Auto-generated method stub
+
 		Log.d("TAG", "onListItemClick");
 		Intent intent = new Intent(getActivity(), EarthQuakeDetails.class);
-		intent.putExtra("ID", 2);
+		intent.putExtra("ID", id);
+		Log.d("TAG", "onListItemClick id:" + id);
 		startActivity(intent);
 		super.onListItemClick(l, v, position, id);
 	}

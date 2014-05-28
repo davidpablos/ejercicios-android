@@ -14,36 +14,46 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Service;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
+import android.os.IBinder;
 import android.util.Log;
 
-public class DownloadEarthQuakes extends AsyncTask<String, Integer, ArrayList<EarthQuake>> {
+public class MyService extends Service {
 	
-//	public interface ICallback {
-//		public void refreshEarthquakesList(ArrayList<EarthQuake> earthQuake);
-//	}
-	
-//	private static final String EARTHQUAKES_URL = 
-//			"http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson";
-	private Context context;
-	
-	public DownloadEarthQuakes(Context context) {
-		this.context = context;
-	}
+	private String url;
 
 	@Override
-	protected ArrayList<EarthQuake> doInBackground(String... urls) {
-		ArrayList<EarthQuake> earthquakeList = new ArrayList<EarthQuake>();
-		int count = urls.length;
-		for (int i = 0; i < count; i++) {
-			earthquakeList = downloadJSON(urls[i]);
-		}
+	public IBinder onBind(Intent intent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		super.onCreate();
+		this.url = EarthQuakeList.EARTHQUAKES_URL;
 		
-		return earthquakeList;
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		// TODO Auto-generated method stub
+		Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				downloadJson(this.url);
+				stopSelf();
+			}
+
+		});
+		return  Service.START_NOT_STICKY;
 	}
 	
 	private ArrayList<EarthQuake> downloadJSON(String stringUrl) {
@@ -107,7 +117,6 @@ public class DownloadEarthQuakes extends AsyncTask<String, Integer, ArrayList<Ea
 				earthquake.setLng(earthquakeCoordinates.getDouble(1));
 				earthquake.setUrl(earthquakeProperties.getString("url"));
 
-//				earthquakeList.add(earthquake);
 				insertEarthQuake(earthquake);
 			}
 
@@ -119,11 +128,6 @@ public class DownloadEarthQuakes extends AsyncTask<String, Integer, ArrayList<Ea
 			Log.e("DOWNLOADS", e.getMessage());
 		}
 		return earthquakeList;
-	}
-	
-	protected void onPostExecute(ArrayList<EarthQuake> earthquakeList) {
-		super.onPostExecute(earthquakeList);
-//		callback.refreshEarthquakesList(earthquakeList);
 	}
 	
 	public void insertEarthQuake(EarthQuake earthquake) {
@@ -142,7 +146,9 @@ public class DownloadEarthQuakes extends AsyncTask<String, Integer, ArrayList<Ea
 		newValues.put(MyContentProvider.URL, earthquake.getUrl());
 		newValues.put(MyContentProvider.CREATED_AT, currentDate.getTime());
 		newValues.put(MyContentProvider.UPDATED_AT, currentDate.getTime());
-		ContentResolver cr = context.getContentResolver();
-		Uri myRowUri = cr.insert(MyContentProvider.CONTENT_URI, newValues);
+		
+		ContentResolver cr = getContentResolver();
+		cr.insert(MyContentProvider.CONTENT_URI, newValues);
 	}
+
 }

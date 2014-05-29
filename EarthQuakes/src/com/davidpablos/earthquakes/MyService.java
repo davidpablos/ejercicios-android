@@ -24,8 +24,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class MyService extends Service {
-	
-	private String url;
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -37,23 +35,39 @@ public class MyService extends Service {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-		this.url = EarthQuakeList.EARTHQUAKES_URL;
 		
 	}
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		// TODO Auto-generated method stub
+		Log.d("TAG", "Starting service");
+		downloadEarthQuakes();
+//		Thread t = new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				Log.d("TAG", "RUN");
+//				downloadJSON(EarthQuakeList.EARTHQUAKES_URL);
+//				stopSelf();
+//			}
+//
+//		});
+		return  Service.START_NOT_STICKY;
+	}
+	
+	private void downloadEarthQuakes() {
 		Thread t = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				downloadJson(this.url);
+				Log.d("TAG", "RUN");
+				downloadJSON(EarthQuakeList.EARTHQUAKES_URL);
 				stopSelf();
 			}
 
 		});
-		return  Service.START_NOT_STICKY;
+		t.start();
 	}
 	
 	private ArrayList<EarthQuake> downloadJSON(String stringUrl) {
@@ -91,7 +105,7 @@ public class MyService extends Service {
 		} catch (IOException e) {
 			Log.d("EarthQuakes", "IO Exception.", e);
 		}
-		Log.d("TAG", ((Integer)earthquakeList.size()).toString());
+//		Log.d("TAG", ((Integer)earthquakeList.size()).toString());
 		return earthquakeList;
 	}
 
@@ -125,7 +139,7 @@ public class MyService extends Service {
 			}
 			
 		} catch (JSONException e) {
-			Log.e("DOWNLOADS", e.getMessage());
+			Log.e("Exception processing JSON: ", e.getMessage());
 		}
 		return earthquakeList;
 	}

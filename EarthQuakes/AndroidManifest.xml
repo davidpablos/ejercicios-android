@@ -40,6 +40,11 @@
             android:name="com.davidpablos.earthquakes.EarthQuakeDetails"
             android:label="@string/title_activity_earth_quake_details" >
         </activity>
+        <receiver android:name=".MyReceiver">   
+                <intent-filter>
+                   <action android:name="com.davidpablos.earthquakes.alarmrefresh" />
+                </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -56,7 +56,7 @@ public class EarthQuakeList extends ListFragment implements LoaderCallbacks<Curs
 		
 //		new DownloadEarthQuakes(getActivity()).execute(EARTHQUAKES_URL);
 		Intent service = new Intent(getActivity(), MyService.class);
-		
+		getActivity().startService(service);
 	}
 
 	@Override

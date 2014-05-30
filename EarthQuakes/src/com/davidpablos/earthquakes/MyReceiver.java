@@ -10,8 +10,8 @@ public class MyReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
     	Log.d("TAG", "MyReceiver");
-//       Intent service1 = new Intent(context, MyAlarmService.class);
-//       context.startService(service1);
+       Intent service1 = new Intent(context, MyService.class);
+       context.startService(service1);
         
     }   
 }

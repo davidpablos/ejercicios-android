@@ -41,6 +41,7 @@ public class FragmentSettingsActivity extends PreferenceFragment implements
 				setInexactRepeatingAlarm(prefs);
 			} else {
 				// Delete alarm
+				cancelRepeatingAlarm();
 			}
 		} else if (key == getResources().getString(R.string.interval_list_key)) {
 			Log.d("TAG", prefs.getString(key, "60"));
@@ -64,5 +65,15 @@ public class FragmentSettingsActivity extends PreferenceFragment implements
 		alarmManager.setInexactRepeating(alarmType, timeOfWait, timeOfWait,
 				alarmIntent);
 
+	}
+	
+	private void cancelRepeatingAlarm() {
+		AlarmManager alarmManager = (AlarmManager) getActivity()
+				.getSystemService(Context.ALARM_SERVICE);
+
+		Intent intentToFire = new Intent(REFRESH_ALARM);
+		PendingIntent alarmIntent = PendingIntent.getBroadcast(getActivity(),
+				0, intentToFire, 0);
+		alarmManager.cancel(alarmIntent);
 	}
 }
